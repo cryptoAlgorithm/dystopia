@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import {CssBaseline, CssVarsProvider} from "@mui/joy";
+import {CssBaseline, CssVarsProvider, GlobalStyles} from "@mui/joy";
+import 'react-material-symbols/rounded';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,15 @@ export default function RootLayout({
       <body className={inter.className}>
       <CssVarsProvider>
         <CssBaseline />
+        <GlobalStyles styles={{
+          '.material-symbols': {
+            color: 'var(--Icon-color)',
+            margin: 'var(--Icon-margin)',
+            fontSize: 'var(--Icon-fontSize, 20px)!important',
+            width: '1em',
+            height: '1em'
+          }
+        }} />
         {children}
       </CssVarsProvider>
       </body>

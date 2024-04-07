@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import {CssBaseline, CssVarsProvider} from "@mui/joy";
+import {Stack} from "@mui/joy";
 import Toolbar from "@/components/Toolbar";
-import {cloneElement} from "react";
+import {Sidebar} from '@/components/Sidebar'
 
 export default function FeedLayout({
   children,
@@ -11,8 +9,11 @@ export default function FeedLayout({
 }>) {
   return <>
     <Toolbar />
-    <main style={{ paddingTop: 64, minHeight: '100vh' }}>
-      {children}
-    </main>
+    <Stack direction={'row'}>
+      <Sidebar />
+      <main style={{paddingTop: 64, paddingLeft: 260, minHeight: '100vh', flex: 1}}>
+        {children}
+      </main>
+    </Stack>
   </>
 }

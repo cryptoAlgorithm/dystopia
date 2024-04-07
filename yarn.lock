@@ -2414,6 +2414,11 @@ react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
+react-material-symbols@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/react-material-symbols/-/react-material-symbols-4.4.0.tgz#563aae1e5d9dbb09adf2b76707b774577dec710c"
+  integrity sha512-KKLocA1Fqdgk70Z78PeY4M8yvqIpnvCmHuniXbF52fPD+CNoPrR5DlECq7UVOgvgTpcOQzY0qgMdpvxuw3Ynvg==
+
 react@^18:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
