@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang='en' data-joy-color-scheme={'dark'}>
       <body className={inter.className}>
       <CssVarsProvider>
         <CssBaseline />
@@ -27,6 +27,9 @@ export default function RootLayout({
             fontSize: 'var(--Icon-fontSize, 20px)!important',
             width: '1em',
             height: '1em'
+          },
+          html: {
+            scrollBehavior: 'smooth'
           }
         }} />
         {children}

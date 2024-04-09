@@ -6,6 +6,7 @@ import {getPost} from "@/data/post";
 import {Voter} from '@/components/post/Voter'
 import {CommentComposer} from '@/app/(feed)/posts/[id]/_components/CommentComposer'
 import {Comment} from '@/components/post/Comment'
+import {CommentsViewChip} from '@/app/(feed)/posts/[id]/_components/CommentsViewChip'
 
 export default async function Post({ params }: { params: { id: string } }) {
   if (!ObjectId.isValid(params.id)) notFound() // Make sure ObjectId creation doesn't explode if an invalid id is supplied
@@ -21,13 +22,14 @@ export default async function Post({ params }: { params: { id: string } }) {
           <Typography textColor={'text.secondary'}>{ post.content }</Typography>
         </CardContent>
       </Card>
-      <Stack direction={'row'}>
+      <Stack direction={'row'} spacing={2}>
         <Voter />
+        <CommentsViewChip numComments={comments.length} />
       </Stack>
 
       <Divider />
 
-      <Typography level={'title-md'}>Comments</Typography>
+      <Typography level={'title-md'} id={'comments'}>Comments</Typography>
       <CommentComposer postID={post._id.toHexString()} />
       { comments.map(c => <Comment key={c._id.toString()} comment={c} />) }
       { comments.length == 0 && <Typography textColor={'text.tertiary'} textAlign={'center'}>No Comments</Typography> }
