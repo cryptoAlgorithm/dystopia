@@ -19,7 +19,7 @@ export default async function Post({ params }: { params: { id: string } }) {
       <Card variant={'soft'}>
         <CardContent>
           <Typography level={'h1'}>{ post.title }</Typography>
-          <Typography textColor={'text.secondary'}>{ post.content }</Typography>
+          <Typography textColor={'text.secondary'} whiteSpace={'pre-wrap'}>{ post.content }</Typography>
         </CardContent>
       </Card>
       <Stack direction={'row'} spacing={2}>

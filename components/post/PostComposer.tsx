@@ -1,4 +1,4 @@
-import {Button, FormControl, FormLabel, Input, Stack, Textarea} from '@mui/joy'
+import {FormControl, FormLabel, Input, Stack, Textarea} from '@mui/joy'
 import {createPost} from '@/app/(sidebar)/post/actions'
 import {PostButton} from '@/components/post/PostButton'
 

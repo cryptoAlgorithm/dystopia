@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import {CssBaseline, CssVarsProvider, GlobalStyles} from "@mui/joy";
 import 'react-material-symbols/rounded';
+import ThemeRegistry from '@/components/ThemeRegistry'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-      <CssVarsProvider>
+      <ThemeRegistry options={{ key: 'd' }}>
         <CssBaseline />
         <GlobalStyles styles={{
           '.material-symbols': {
@@ -33,7 +34,7 @@ export default function RootLayout({
           }
         }} />
         {children}
-      </CssVarsProvider>
+      </ThemeRegistry>
       </body>
     </html>
   );
