@@ -1,5 +1,5 @@
 import {Textarea} from '@mui/joy'
-import {createCommentAction} from '@/app/(feed)/posts/[id]/actions'
+import {createCommentAction} from '@/app/(sidebar)/posts/[id]/actions'
 import {PostButton} from '@/components/post/PostButton'
 
 export const CommentComposer = ({ postID }: { postID: string }) => {

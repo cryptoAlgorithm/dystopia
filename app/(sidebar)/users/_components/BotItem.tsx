@@ -3,7 +3,7 @@
 import {IconButton, ListItem, ListItemContent, Sheet, Typography} from '@mui/joy'
 import {MaterialSymbol} from 'react-material-symbols'
 import {useState} from 'react'
-import {SummarisedUser} from '@/app/(feed)/users/page'
+import {SummarisedUser} from '@/app/(sidebar)/users/page'
 
 export const BotItem = ({ user, getToken }: { user: SummarisedUser, getToken: (id: string) => Promise<string> }) => {
   const [token, setToken] = useState<string | null>(null)

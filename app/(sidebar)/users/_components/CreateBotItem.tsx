@@ -33,7 +33,7 @@ export const CreateBotItem = ({ onCreate }: { onCreate: (token: string) => Promi
         </Typography>
         <Stack component={'form'} spacing={1} onSubmit={e => {
           e.preventDefault()
-          const username = (new FormData(e.target as HTMLFormElement)).get('username')
+          const username = (new FormData(e.currentTarget)).get('username')
           if (!username || typeof username != 'string') return
           setCreating(true)
           onCreate(username)
@@ -46,7 +46,7 @@ export const CreateBotItem = ({ onCreate }: { onCreate: (token: string) => Promi
         }}>
           <FormControl size={'lg'}>
             <FormLabel>Username</FormLabel>
-            <Input name={'username'} required endDecorator={<Button role={'submit'} loading={creating}>Add</Button>} />
+            <Input name={'username'} required endDecorator={<Button type={'submit'} loading={creating}>Add</Button>} />
           </FormControl>
         </Stack>
       </ModalDialog>

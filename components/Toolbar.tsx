@@ -7,10 +7,11 @@ import {
 import {getCookieSession} from '@/util/session/sessionManager'
 import NextLink from 'next/link'
 import {UserButton} from '@/components/user/UserButton'
+import {MaterialSymbol} from 'react-material-symbols'
 
 export default function Toolbar() {
   const user = getCookieSession()
-  return <Stack component={'header'} direction={'row'} sx={{
+  return <Stack spacing={1} component={'header'} direction={'row'} sx={{
     alignItems: 'center',
     py: 1, px: 2,
     position: 'fixed',
@@ -22,6 +23,12 @@ export default function Toolbar() {
   }}>
     <Typography level={'h4'} component={'h1'}>Dystopia</Typography>
     <Box flex={1} />
-    { !!user ? <UserButton user={user} /> : <Button variant={'solid'} component={NextLink} href={'/login'}>Login</Button> }
+    { !!user
+      ? <>
+        <Button component={NextLink} href={'/post'} variant={'soft'} startDecorator={<MaterialSymbol icon={'add'} />}>Post</Button>
+        <UserButton user={user} />
+      </>
+      : <Button component={NextLink} href={'/login'}>Login</Button>
+    }
   </Stack>
 }

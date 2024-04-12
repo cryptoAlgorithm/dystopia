@@ -4,9 +4,9 @@ import {ObjectId} from "bson";
 import {notFound} from "next/navigation";
 import {getPost} from "@/data/post";
 import {Voter} from '@/components/post/Voter'
-import {CommentComposer} from '@/app/(feed)/posts/[id]/_components/CommentComposer'
+import {CommentComposer} from '@/app/(sidebar)/posts/[id]/_components/CommentComposer'
 import {Comment} from '@/components/post/Comment'
-import {CommentsViewChip} from '@/app/(feed)/posts/[id]/_components/CommentsViewChip'
+import {CommentsViewChip} from '@/app/(sidebar)/posts/[id]/_components/CommentsViewChip'
 
 export default async function Post({ params }: { params: { id: string } }) {
   if (!ObjectId.isValid(params.id)) notFound() // Make sure ObjectId creation doesn't explode if an invalid id is supplied

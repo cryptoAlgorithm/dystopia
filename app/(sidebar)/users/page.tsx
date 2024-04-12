@@ -6,9 +6,9 @@ import {redirect} from 'next/navigation'
 import {WithId} from 'mongodb'
 import {IBaseUser, IUser} from '@/data/IUser'
 import mongodb from '@/lib/mongodb'
-import {CreateBotItem} from '@/app/(feed)/users/_components/CreateBotItem'
-import {BotItem} from '@/app/(feed)/users/_components/BotItem'
-import {addBotUser, generateBotToken} from '@/app/(feed)/users/actions'
+import {CreateBotItem} from '@/app/(sidebar)/users/_components/CreateBotItem'
+import {BotItem} from '@/app/(sidebar)/users/_components/BotItem'
+import {addBotUser, generateBotToken} from '@/app/(sidebar)/users/actions'
 import {Fragment} from 'react'
 
 const getBotUsers = async (): Promise<WithId<IBaseUser>[]> => {

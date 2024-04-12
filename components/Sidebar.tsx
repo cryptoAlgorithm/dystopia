@@ -18,7 +18,6 @@ const SelectableLinkButton = ({ icon, path, children }: { icon: SymbolCodepoints
 }
 
 export const Sidebar = () => {
-
   return <List size={'lg'} component={'nav'} sx={{
     width: 260,
     flexShrink: 0,
@@ -34,6 +33,7 @@ export const Sidebar = () => {
     border: '1px solid var(--joy-palette-divider)', borderWidth: '0 1px 0 0'
   }}>
     <SelectableLinkButton icon={'home'} path={'/'}>Home</SelectableLinkButton>
+    <SelectableLinkButton icon={'add'} path={'/post'}>Create Post</SelectableLinkButton>
     <Box flex={1}/>
     <ListItem nested>
       <ListSubheader>You</ListSubheader>

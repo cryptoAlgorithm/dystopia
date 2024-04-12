@@ -1,9 +1,12 @@
-export type VotingScores = { up: number, down: number }
 
 export interface IPost {
   content: string
   title: string
-  votes: VotingScores
+  at: Date
+  /**
+   * Embedding vector
+   */
+  embedding: number[]
 }
 
 /**
