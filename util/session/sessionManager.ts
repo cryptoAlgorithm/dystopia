@@ -1,5 +1,6 @@
+import 'server-only'
 import {WithId} from 'mongodb'
-import {IUser} from '@/data/IUser'
+import {IBaseUser, IUser} from '@/data/IUser'
 import {cookies} from 'next/headers'
 import * as jwt from 'jsonwebtoken'
 import {z} from 'zod'
@@ -13,14 +14,18 @@ const CookieSessionSchema = z.object({
 })
 export type CookieSession = z.infer<typeof CookieSessionSchema>
 
+export const generateJWTToken = (user: WithId<IBaseUser>): string => {
+  return jwt.sign(
+    { id: user._id, u: user.username },
+    jwtSecret,
+    {expiresIn: '1d'}
+  )
+}
+
 export const createSession = (user: WithId<IUser>) => {
   cookies().set(
     cookieKey,
-    jwt.sign(
-      { id: user._id, u: user.username },
-      jwtSecret,
-      {expiresIn: '1d'}
-    ),
+    generateJWTToken(user),
     { httpOnly: true }
   )
 }

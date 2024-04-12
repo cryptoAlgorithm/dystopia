@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' data-joy-color-scheme={'dark'}>
+    <html lang='en'>
       <body className={inter.className}>
       <CssVarsProvider>
         <CssBaseline />

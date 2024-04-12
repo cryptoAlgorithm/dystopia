@@ -3,6 +3,7 @@
 import {getUser} from "@/data/user";
 import * as argon2 from "argon2";
 import {createSession} from '@/util/session/sessionManager'
+import {turnstileValidate} from '@/lib/turnstileValidate'
 
 type LoginStatus = { success: true | null } | { success: false, reason: string }
 
@@ -11,8 +12,17 @@ export const loginAction = async (
   formData: FormData
 ): Promise<LoginStatus> => {
   const username = formData.get('user'),
-    pw = formData.get('password')
-  if (!username || !pw || typeof username != 'string' || typeof pw != 'string') return { success: false, reason: 'Invalid payload' }
+    pw = formData.get('password'),
+    turnstileToken = formData.get('turnstile')
+  if (
+    !username || !pw || !turnstileToken
+    || typeof username != 'string' || typeof pw != 'string' || typeof turnstileToken != 'string'
+  ) {
+    return { success: false, reason: 'Invalid payload' }
+  }
+
+  // Validate turnstile
+  if (!(await turnstileValidate(turnstileToken))) return { success: false, reason: 'Invalid Turnstile token' }
 
   // probably has some timing vulnerability exposing whether the user exists
   const user = await getUser(username)

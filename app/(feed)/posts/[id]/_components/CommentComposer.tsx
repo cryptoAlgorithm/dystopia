@@ -7,7 +7,7 @@ export const CommentComposer = ({ postID }: { postID: string }) => {
 
   return <form action={action}>
     <Textarea
-      placeholder={'Write a comment...'} name={'comment'}
+      placeholder={'Add a comment...'} name={'comment'}
       size={'lg'} variant={'outlined'} sx={{ '--Textarea-radius': 'var(--joy-radius-md)' }}
       endDecorator={<PostButton />}
     />
