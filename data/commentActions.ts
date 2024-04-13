@@ -1,3 +1,4 @@
+import 'server-only'
 import {cache} from "react";
 import {ClientComment, IComment} from "@/data/IComment";
 import mongodb from "@/lib/mongodb";

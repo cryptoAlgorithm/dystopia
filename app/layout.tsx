@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import {CssBaseline, CssVarsProvider, GlobalStyles} from "@mui/joy";
+import { Inter } from 'next/font/google';
+import {CssBaseline, GlobalStyles} from '@mui/joy';
 import 'react-material-symbols/rounded';
 import ThemeRegistry from '@/components/ThemeRegistry'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Dystopia',

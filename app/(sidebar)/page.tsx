@@ -1,6 +1,3 @@
-import mongodb from "@/lib/mongodb";
-import {IPost} from "@/data/IPost";
-import {WithId} from "mongodb";
 import {
   Box,
   Container,
@@ -8,11 +5,7 @@ import {
 } from "@mui/joy";
 import PostCard from "@/components/post/PostCard";
 import {MaterialSymbol} from 'react-material-symbols'
-
-const getPosts = async (): Promise<WithId<IPost>[]> => {
-  const db = (await mongodb).db()
-  return db.collection<IPost>("posts").find().toArray()
-}
+import {getPosts} from '@/data/postActions'
 
 const BottomPlaceholder = () => <Box textAlign={'center'} pt={2}>
   <Typography level={'h1'}><MaterialSymbol icon={'post'} /></Typography>
@@ -24,6 +17,7 @@ const BottomPlaceholder = () => <Box textAlign={'center'} pt={2}>
 
 export default async function Home() {
   const posts = await getPosts()
+  console.log(posts)
   return <Container maxWidth={'sm'}>
     <Stack my={2} spacing={2}>
       { posts.map(post => <PostCard post={post} key={post._id.toString()} />) }

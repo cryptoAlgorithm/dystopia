@@ -1,11 +1,11 @@
-import {IPost} from "@/data/IPost";
-import {WithId} from "mongodb";
 import {Card, CardContent, Link, Stack, Typography} from "@mui/joy";
 import NextLink from "next/link";
 import {Voter} from '@/components/post/Voter'
 import {formatDistanceToNow} from 'date-fns'
+import {QueryPost} from '@/data/postActions'
+import {updateVote} from '@/data/voteActions'
 
-export default function PostCard({ post }: { post: WithId<IPost> }) {
+export default function PostCard({ post }: { post: QueryPost }) {
   return <Card sx={{
     '&:hover': {
       boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder'
@@ -21,7 +21,7 @@ export default function PostCard({ post }: { post: WithId<IPost> }) {
       </Typography>
       <Typography level={'body-sm'} textColor={'text.tertiary'}>{post.content}</Typography>
       <Stack direction={'row'} mt={1}>
-        <Voter size={'sm'} />
+        <Voter size={'sm'} vote={updateVote} count={post.voteCount} id={post._id.toHexString()} />
       </Stack>
     </CardContent>
   </Card>

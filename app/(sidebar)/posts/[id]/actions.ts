@@ -3,7 +3,7 @@
 import {ErrorPayload} from '@/data/types'
 import {getCookieSession} from '@/util/session/sessionManager'
 import {ObjectId} from 'bson'
-import {addComment} from '@/data/comment'
+import {addComment} from '@/data/commentActions'
 import {revalidatePath} from 'next/cache'
 
 export const createCommentAction = async (

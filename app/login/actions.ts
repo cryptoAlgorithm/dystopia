@@ -1,6 +1,6 @@
 'use server'
 
-import {getUser} from "@/data/user";
+import {getUser} from "@/data/userActions";
 import * as argon2 from "argon2";
 import {createSession} from '@/util/session/sessionManager'
 import {turnstileValidate} from '@/lib/turnstileValidate'
