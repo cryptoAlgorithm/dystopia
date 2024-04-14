@@ -1,9 +1,9 @@
 import {FormControl, FormLabel, Input, Stack, Textarea} from '@mui/joy'
-import {createPost} from '@/app/(sidebar)/post/actions'
+import {createPostAction} from '@/app/(sidebar)/post/actions'
 import {PostButton} from '@/components/post/PostButton'
 
 export const PostComposer = () => {
-  return <Stack component={'form'} spacing={2} action={createPost}>
+  return <Stack component={'form'} spacing={2} action={createPostAction}>
     <FormControl required>
       <FormLabel>Title</FormLabel>
       <Input size={'lg'} name={'title'} slotProps={{ input: { pattern: '.*\\S.*' }}} />

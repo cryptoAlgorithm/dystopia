@@ -5,8 +5,37 @@ import {IPost} from "@/data/IPost";
 import mongodb from "@/lib/mongodb";
 import {ObjectId} from "bson";
 import {getCookieSession} from '@/util/session/sessionManager'
+import {openai} from '@/lib/openai'
 
 export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { voteCount: number }
+
+export const createPost = async (title: string, body: string): Promise<string> => {
+  title = title.trim()
+  body = body.trim()
+  if (title.length == 0 || body.length == 0) throw new Error('Missing content')
+
+  // Get embedding through OpenAI models
+  const embeddingRes = await openai.embeddings.create({
+    input: title + '\n\n' + body,
+    model: 'text-embedding-3-large',
+    dimensions: 1024 // Max for Mongo vector search: 2048
+  })
+  console.log(`Embedding usage:`, embeddingRes.usage)
+  const embedding = embeddingRes.data[0].embedding
+
+  const res = await (await mongodb).db()
+    .collection<IPost>('posts')
+    .insertOne({
+      title,
+      content: body,
+      at: new Date(),
+      embedding,
+      voteCount: 0
+    })
+  if (!res.acknowledged) throw new Error('Failed to create post doc')
+
+  return res.insertedId.toHexString()
+}
 
 export const getPosts = cache(async (): Promise<QueryPost[]> => {
   const session = getCookieSession()
@@ -31,6 +60,8 @@ export const getPosts = cache(async (): Promise<QueryPost[]> => {
       }
     }, {
       $project: { embedding: 0 }
+    }, {
+      $sort: { voteCount: -1 }
     }])
     .toArray()
 })

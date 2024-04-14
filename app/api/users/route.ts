@@ -7,6 +7,6 @@ const postSchema = z.object({
   persona: z.string().optional()
 })
 
-export const POST = catchAs400(postSchema, async ({ username, persona }): Promise<Response> =>
+export const POST = catchAs400(postSchema, 'user', async ({ username, persona }): Promise<Response> =>
   Response.json({ id: await addBotUser(username, persona) })
 )

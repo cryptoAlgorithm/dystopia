@@ -7,6 +7,7 @@ export interface IPost {
    * Embedding vector
    */
   embedding: number[]
+  voteCount: number // Cache vote count to reduce need for lookup
 }
 
 /**
