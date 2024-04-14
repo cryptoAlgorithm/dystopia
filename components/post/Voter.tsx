@@ -1,15 +1,19 @@
 'use client'
 
-import {IconButton, Sheet, Stack, Typography} from '@mui/joy'
+import {IconButton, Sheet, Typography} from '@mui/joy'
 import {useCallback, useState} from 'react'
 import {VoteDelta} from '@/data/IVote'
 import KeyboardArrowDownRounded from '@mui-symbols-material/w400/KeyboardArrowDownRounded'
 import KeyboardArrowUpRounded from '@mui-symbols-material/w400/KeyboardArrowUpRounded'
 
-export const Voter = ({ size = 'md', vote, id, count: originalCount }: { size?: 'sm' | 'md', vote: (t: string, delta: VoteDelta) => Promise<void>, id: string, count: number }) => {
+export const Voter = ({
+    size = 'md', vote, voteDelta, id, count
+  }: {
+    size?: 'sm' | 'md', vote: (t: string, delta: VoteDelta) => Promise<void>, voteDelta: number, id: string, count: number
+  }
+) => {
   const [voting, setVoting] = useState(false)
-  const [count, setCount] = useState(originalCount)
-  const [voteDelta, setVoteDelta] = useState<VoteDelta>(0)
+  // const [count, setCount] = useState(originalCount)
 
   const handleVote = useCallback((delta: VoteDelta) => {
     setVoting(true)
@@ -18,29 +22,31 @@ export const Voter = ({ size = 'md', vote, id, count: originalCount }: { size?: 
     }
     console.log('Voting:', delta)
     vote(id, delta)
-      .then(() => {
-        setVoteDelta(delta)
-        setCount(originalCount + delta)
-      })
       .finally(() => setVoting(false))
-  }, [vote, voteDelta, originalCount, setVoting, setVoteDelta, setCount])
+  }, [id, vote, voteDelta, setVoting])
 
-  return <Stack
-    component={Sheet} variant={'soft'} borderRadius={100}
-    direction={'row'} alignItems={'center'} spacing={.5}
-    bgcolor={''}
+  const color = voteDelta == 1 ? 'success' : voteDelta == -1 ? 'warning' : 'neutral'
+
+  return <Sheet variant={'soft'}
+    color={color}
     sx={{
+      display: 'flex',
+      alignItems: 'center',
+      borderRadius: 100,
+      gap: .5,
       '& button': {
-        borderRadius: '50%'
-      }
+        borderRadius: '50%',
+        transition: 'background .2s ease-out'
+      },
+      transition: 'background .2s ease-out'
     }}
   >
-    <IconButton variant={'soft'} size={size} disabled={voting} onClick={() => handleVote(1)}>
+    <IconButton variant={'soft'} color={color} size={size} disabled={voting} onClick={() => handleVote(1)}>
       <KeyboardArrowUpRounded />
     </IconButton>
     <Typography>{count}</Typography>
-    <IconButton variant={'soft'} size={size} disabled={voting} onClick={() => handleVote(-1)}>
+    <IconButton variant={'soft'} color={color} size={size} disabled={voting} onClick={() => handleVote(-1)}>
       <KeyboardArrowDownRounded />
     </IconButton>
-  </Stack>
+  </Sheet>
 }

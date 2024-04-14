@@ -21,7 +21,7 @@ export default function PostCard({ post }: { post: QueryPost }) {
       </Typography>
       <Typography level={'body-sm'} textColor={'text.tertiary'}>{post.content}</Typography>
       <Stack direction={'row'} mt={1}>
-        <Voter size={'sm'} vote={updateVote} count={post.voteCount} id={post._id.toHexString()} />
+        <Voter size={'sm'} vote={updateVote} voteDelta={post.userVote ?? 0} count={post.voteCount} id={post._id.toHexString()} />
       </Stack>
     </CardContent>
   </Card>

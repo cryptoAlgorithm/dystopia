@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-      <ThemeRegistry options={{ key: 'd' }}>
+      <ThemeRegistry options={{ key: 'joy' }}>
         <CssBaseline />
         <GlobalStyles styles={{
           html: {

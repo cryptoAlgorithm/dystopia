@@ -1,5 +1,5 @@
 import {
-  Container, FormControl, FormLabel, Typography,
+  Container, Divider, FormControl, FormLabel, Typography,
 } from "@mui/joy";
 import {ThemePicker} from '@/app/(sidebar)/users/me/settings/_components/ThemePicker'
 
@@ -10,5 +10,7 @@ export default async function User() {
       <FormLabel>Interface Theme</FormLabel>
       <ThemePicker />
     </FormControl>
+    <Divider sx={{ my: 2 }} />
+    <Typography level={'body-xs'}>Note: These settings are persisted on your browser and not synced with your account.</Typography>
   </Container>
 }

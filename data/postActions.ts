@@ -6,8 +6,9 @@ import mongodb from "@/lib/mongodb";
 import {ObjectId} from "bson";
 import {getCookieSession} from '@/util/session/sessionManager'
 import {openai} from '@/lib/openai'
+import {VoteDelta} from '@/data/IVote'
 
-export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { voteCount: number }
+export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta }
 
 export const createPost = async (title: string, body: string): Promise<string> => {
   title = title.trim()
@@ -37,36 +38,42 @@ export const createPost = async (title: string, body: string): Promise<string> =
   return res.insertedId.toHexString()
 }
 
-export const getPosts = cache(async (): Promise<QueryPost[]> => {
+export const getPosts = cache(async (id?: string): Promise<QueryPost[]> => {
   const session = getCookieSession()
   const db = (await mongodb).db()
   return db
     .collection<IPost>('posts')
-    .aggregate<QueryPost>([{
+    .aggregate<QueryPost>([...(id ? [{
+      $match: { _id: new ObjectId(id) }
+    }] : []), ...(session ? [{
       $lookup: {
         from: 'votes',
-        localField: '_id',
-        foreignField: 'for',
-        as: 'votes'
-      }
-    }, ...(session ? [] : []), { // TODO: Find out current user's vote
-      $addFields: {
-        voteCount: {
-          $ifNull: [{ $first: '$votes.delta' }, 0]
+        let: {
+          id: '$_id'
         },
-        userDelta: {
-          $first: '$userVote.delta'
-        }
+        pipeline: [{
+          $match: {
+            $expr: {
+              $and: [{
+                $eq: ['$for', '$$id']
+              }, {
+                $eq: ['$user', new ObjectId(session.id)]
+              }]
+            }
+          }
+        }],
+        as: 'userVote'
       }
     }, {
+      $set: {
+        userVote: { $first: '$userVote.delta' }
+      }
+    }] : []), {
       $project: { embedding: 0 }
     }, {
-      $sort: { voteCount: -1 }
+      $sort: { at: -1 }
     }])
     .toArray()
 })
 
-export const getPost = cache(async (id: string): Promise<WithId<IPost> | null> => {
-  const col = (await mongodb).db().collection<IPost>('posts')
-  return col.findOne({ _id: ObjectId.createFromHexString(id)})
-})
+export const getPost = cache(async (id: string): Promise<QueryPost | null> => (await getPosts(id))[0])

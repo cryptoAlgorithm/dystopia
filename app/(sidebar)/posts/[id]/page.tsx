@@ -24,7 +24,7 @@ export default async function Post({ params }: { params: { id: string } }) {
         </CardContent>
       </Card>
       <Stack direction={'row'} spacing={2}>
-        <Voter vote={updateVote} count={0} id={post._id.toHexString()} />
+        <Voter vote={updateVote} voteDelta={post.userVote ?? 0} count={post.voteCount} id={post._id.toHexString()} />
         <CommentsViewChip numComments={comments.length} />
       </Stack>
 
