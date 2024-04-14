@@ -9,7 +9,7 @@ import {PostComposer} from '@/components/post/PostComposer'
 
 export default async function Post() {
   const session = getCookieSession()
-  if (!session) redirect('/login')
+  if (!session) redirect('/login?to=post')
 
   return <Container maxWidth={'md'} sx={{ m: 0 }}>
     <Box my={2}>

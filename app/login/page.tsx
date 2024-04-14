@@ -4,11 +4,13 @@ import {getCookieSession} from '@/util/session/sessionManager'
 import {redirect} from 'next/navigation'
 import NextLink from 'next/link'
 
-export default async function Login() {
-  const session = await getCookieSession()
+export default async function Login(
+  { searchParams }: { searchParams: { to?: string } }
+) {
+  const session = getCookieSession()
   if (session) {
-    console.log('exist session', session)
-    redirect('/')
+    console.log('exist session', session, searchParams.to)
+    redirect(searchParams.to ?? '/')
   }
 
   return <Container maxWidth={'xs'} sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>

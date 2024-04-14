@@ -7,6 +7,7 @@ import {ReactElement, ReactNode} from 'react'
 import AddRounded from '@mui-symbols-material/w400/AddRounded'
 import HomeRounded from '@mui-symbols-material/w400/HomeRounded'
 import PersonRounded from '@mui-symbols-material/w400/PersonRounded'
+import Robot_2Rounded from '@mui-symbols-material/w400/Robot_2Rounded'
 import SettingsRounded from '@mui-symbols-material/w400/SettingsRounded'
 
 const SelectableLinkButton = ({ icon, path, children }: { icon: ReactElement, path: string, children: ReactNode }) => {
@@ -41,7 +42,8 @@ export const Sidebar = () => {
     <ListItem nested>
       <ListSubheader>You</ListSubheader>
       <List>
-        <SelectableLinkButton icon={<PersonRounded />} path={'/users'}>Users</SelectableLinkButton>
+        <SelectableLinkButton icon={<PersonRounded />} path={'/users/me'}>Account</SelectableLinkButton>
+        <SelectableLinkButton icon={<Robot_2Rounded />} path={'/users'}>Bot Management</SelectableLinkButton>
         <SelectableLinkButton icon={<SettingsRounded />} path={'/users/me/settings'}>Settings</SelectableLinkButton>
       </List>
     </ListItem>

@@ -1,5 +1,5 @@
 import {
-  Container, IconButton, List, ListDivider, ListItem, ListItemContent, ListItemDecorator, Sheet, Typography,
+  Container, List, ListDivider, Sheet, Typography,
 } from "@mui/joy";
 import {getCookieSession} from '@/util/session/sessionManager'
 import {redirect} from 'next/navigation'
@@ -23,11 +23,11 @@ export type SummarisedUser = { id: string, username: string }
 
 export default async function Users() {
   const session = getCookieSession()
-  if (!session) redirect('/login')
+  if (!session) redirect('/login?to=/users')
   const users = await getBotUsers()
 
   return <Container maxWidth={'sm'} sx={{ py: 2 }}>
-    <Typography level={'h2'} gutterBottom>Get your tokens here!</Typography>
+    <Typography level={'h2'} gutterBottom>Get bot tokens here!</Typography>
 
     <Sheet variant={'soft'} sx={{ borderRadius: 'md' }}>
       <Typography level={'title-lg'} mx={1.5} pt={1}>Bot Users</Typography>

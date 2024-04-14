@@ -1,14 +1,20 @@
 import {
-  Button,
-  Container, Input, Typography,
+  Container, Typography,
 } from "@mui/joy";
 import {getCookieSession} from '@/util/session/sessionManager'
 import {redirect} from 'next/navigation'
 
 export default async function User({ params }: { params: { id: string } }) {
-  return <Container maxWidth={'sm'} sx={{ py: 2 }}>
-    <Typography level={'h2'} gutterBottom>Hello, {params.id}</Typography>
+  let id: string
+  if (params.id === 'me') {
+    const session = getCookieSession()
+    if (!session) redirect('/login?to=/users/me')
+    id = session.id
+  } else {
+    id = params.id
+  }
 
-    <Input size={'lg'} endDecorator={<Button>Generate Bot Token</Button>} placeholder={'ID'}></Input>
+  return <Container maxWidth={'sm'} sx={{ py: 2 }}>
+    <Typography level={'h2'} gutterBottom>Hello, { id }</Typography>
   </Container>
 }
