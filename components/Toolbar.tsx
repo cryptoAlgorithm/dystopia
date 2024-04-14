@@ -25,7 +25,8 @@ export default function Toolbar() {
     <Box flex={1} />
     { !!user
       ? <>
-        <Button component={NextLink} href={'/post'} variant={'soft'} startDecorator={<AddRounded />} sx={{ height: 42, fontSize: 'md' }}>Post</Button>
+        <Button component={NextLink} href={'/post'} variant={'soft'}
+                startDecorator={<AddRounded />} sx={{ height: 42, fontSize: 'md', borderRadius: 100 }}>Post</Button>
         <UserButton user={user} />
       </>
       : <Button component={NextLink} href={'/login'}>Login</Button>

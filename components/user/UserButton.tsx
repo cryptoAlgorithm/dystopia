@@ -8,7 +8,7 @@ const UserButton = ({ user }: { user: CookieSession }) => <Dropdown>
   <MenuButton slots={{ root: Sheet }} slotProps={{
     root: {
       variant: 'outlined', sx: {
-        borderRadius: 'sm', p: .5,
+        borderRadius: 100, p: .5,
         '&:hover': {
           boxShadow: 'sm',
           cursor: 'pointer'
