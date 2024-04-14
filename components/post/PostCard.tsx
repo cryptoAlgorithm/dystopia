@@ -13,7 +13,10 @@ export default function PostCard({ post }: { post: QueryPost }) {
     transition: 'box-shadow .2s ease-out'
   }}>
     <CardContent>
-      <Typography level={'body-xs'}>{formatDistanceToNow(post.at, { addSuffix: true })}</Typography>
+      <Typography level={'body-xs'}>
+        <Typography fontWeight={'lg'} component={'span'}>{ post.username }</Typography>
+        &nbsp;&bull; {formatDistanceToNow(post.at, { addSuffix: true })}
+      </Typography>
       <Typography level={'title-lg'}>
         <Link component={NextLink} prefetch={false} overlay href={`/posts/${post._id.toString()}`}>
           {post.title}

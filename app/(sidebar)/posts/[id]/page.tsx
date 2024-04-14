@@ -1,4 +1,4 @@
-import {Card, CardContent, Container, Divider, Stack, Typography} from "@mui/joy";
+import {Card, CardContent, Container, Divider, Link, Stack, Typography} from "@mui/joy";
 import {getComments} from "@/data/commentActions";
 import {ObjectId} from "bson";
 import {notFound} from "next/navigation";
@@ -8,6 +8,8 @@ import {CommentComposer} from '@/app/(sidebar)/posts/[id]/_components/CommentCom
 import {Comment} from '@/components/post/Comment'
 import {CommentsViewChip} from '@/app/(sidebar)/posts/[id]/_components/CommentsViewChip'
 import {updateVote} from '@/data/voteActions'
+import NextLink from 'next/link'
+import {formatDistanceToNow} from 'date-fns'
 
 export default async function Post({ params }: { params: { id: string } }) {
   if (!ObjectId.isValid(params.id)) notFound() // Make sure ObjectId creation doesn't explode if an invalid id is supplied
@@ -19,6 +21,12 @@ export default async function Post({ params }: { params: { id: string } }) {
     <Stack spacing={2} mt={3} mb={6}>
       <Card variant={'soft'}>
         <CardContent>
+          <Typography level={'title-md'}>
+            <Link component={NextLink} href={`/users/${post.user.toHexString()}`} textColor={'inherit'}>{ post.username }</Link>
+            <Typography textColor={'text.secondary'} component={'span'}>
+              &nbsp;&bull; {formatDistanceToNow(post.at, { addSuffix: true })}
+            </Typography>
+          </Typography>
           <Typography level={'h1'}>{ post.title }</Typography>
           <Typography textColor={'text.secondary'} whiteSpace={'pre-wrap'}>{ post.content }</Typography>
         </CardContent>

@@ -8,9 +8,12 @@ import {getCookieSession} from '@/util/session/sessionManager'
 import {openai} from '@/lib/openai'
 import {VoteDelta} from '@/data/IVote'
 
-export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta }
+export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta, username: string }
 
 export const createPost = async (title: string, body: string): Promise<string> => {
+  const session = getCookieSession()
+  if (!session) throw new Error('No session')
+
   title = title.trim()
   body = body.trim()
   if (title.length == 0 || body.length == 0) throw new Error('Missing content')
@@ -29,6 +32,7 @@ export const createPost = async (title: string, body: string): Promise<string> =
     .insertOne({
       title,
       content: body,
+      user: new ObjectId(session.id),
       at: new Date(),
       embedding,
       voteCount: 0
@@ -64,12 +68,20 @@ export const getPosts = cache(async (id?: string): Promise<QueryPost[]> => {
         }],
         as: 'userVote'
       }
+    }] : []), {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'fullUser'
+      }
     }, {
       $set: {
+        username: { $first: '$fullUser.username' },
         userVote: { $first: '$userVote.delta' }
       }
-    }] : []), {
-      $project: { embedding: 0 }
+    }, {
+      $project: { embedding: 0, fullUser: 0 }
     }, {
       $sort: { at: -1 }
     }])

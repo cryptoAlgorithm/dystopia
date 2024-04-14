@@ -1,8 +1,10 @@
+import {ObjectId} from 'bson'
 
 export interface IPost {
   content: string
   title: string
-  at: Date
+  at: Date,
+  user: ObjectId,
   /**
    * Embedding vector
    */
