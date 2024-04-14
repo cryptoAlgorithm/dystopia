@@ -44,7 +44,7 @@ export const Voter = ({
     <IconButton variant={'soft'} color={color} size={size} disabled={voting} onClick={() => handleVote(1)}>
       <KeyboardArrowUpRounded />
     </IconButton>
-    <Typography>{count}</Typography>
+    <Typography color={color}>{count}</Typography>
     <IconButton variant={'soft'} color={color} size={size} disabled={voting} onClick={() => handleVote(-1)}>
       <KeyboardArrowDownRounded />
     </IconButton>

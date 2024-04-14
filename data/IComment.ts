@@ -1,5 +1,4 @@
 import {ObjectId} from "bson";
-import {IUser} from '@/data/IUser'
 import {WithId} from 'mongodb'
 
 export interface IComment {
@@ -8,4 +7,4 @@ export interface IComment {
   content: string
 }
 
-export type ClientComment = WithId<IComment & { user: IUser }>
+export type ClientComment = WithId<IComment & { username: string }>

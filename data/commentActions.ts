@@ -16,11 +16,15 @@ export const getComments = cache(async (postId: string): Promise<ClientComment[]
         from: 'users',
         localField: 'user',
         foreignField: '_id',
-        as: 'user'
+        as: 'fullUser'
       }
     }, {
-      $unwind: '$user'
-    }]) // TODO: Pass only partial user excluding info like password hash
+      $set: {
+        username: { $first: '$fullUser.username' }
+      }
+    }, {
+      $project: { fullUser: 0 }
+    }])
     .toArray()
 })
 

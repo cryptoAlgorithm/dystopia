@@ -1,9 +1,13 @@
 import {ClientComment} from '@/data/IComment'
-import {Stack, Typography} from '@mui/joy'
+import {Link, Stack, Typography} from '@mui/joy'
+import NextLink from 'next/link'
 
 export const Comment = ({ comment }: { comment: ClientComment }) => {
   return <Stack>
-    <Typography level={'title-sm'}>{ comment.user.username }</Typography>
+    <Link level={'title-sm'} component={NextLink} href={`/users/${comment.user.toHexString()}`}
+          color={'neutral'} textColor={'text.primary'}>
+      { comment.username }
+    </Link>
     <Typography>{ comment.content }</Typography>
   </Stack>
 }
