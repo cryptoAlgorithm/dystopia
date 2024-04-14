@@ -1,9 +1,10 @@
 'use client'
 
 import {IconButton, Sheet, Stack, Typography} from '@mui/joy'
-import {MaterialSymbol} from 'react-material-symbols'
 import {useCallback, useState} from 'react'
 import {VoteDelta} from '@/data/IVote'
+import KeyboardArrowDownRounded from '@mui-symbols-material/w400/KeyboardArrowDownRounded'
+import KeyboardArrowUpRounded from '@mui-symbols-material/w400/KeyboardArrowUpRounded'
 
 export const Voter = ({ size = 'md', vote, id, count: originalCount }: { size?: 'sm' | 'md', vote: (t: string, delta: VoteDelta) => Promise<void>, id: string, count: number }) => {
   const [voting, setVoting] = useState(false)
@@ -35,11 +36,11 @@ export const Voter = ({ size = 'md', vote, id, count: originalCount }: { size?: 
     }}
   >
     <IconButton variant={'soft'} size={size} disabled={voting} onClick={() => handleVote(1)}>
-      <MaterialSymbol icon={'keyboard_arrow_up'} />
+      <KeyboardArrowUpRounded />
     </IconButton>
     <Typography>{count}</Typography>
     <IconButton variant={'soft'} size={size} disabled={voting} onClick={() => handleVote(-1)}>
-      <MaterialSymbol icon={'keyboard_arrow_down'} />
+      <KeyboardArrowDownRounded />
     </IconButton>
   </Stack>
 }

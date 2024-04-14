@@ -4,11 +4,11 @@ import {
   Stack, Typography,
 } from "@mui/joy";
 import PostCard from "@/components/post/PostCard";
-import {MaterialSymbol} from 'react-material-symbols'
 import {getPosts} from '@/data/postActions'
+import PostRounded from '@mui-symbols-material/w400/PostRounded'
 
 const BottomPlaceholder = () => <Box textAlign={'center'} pt={2}>
-  <Typography level={'h1'}><MaterialSymbol icon={'post'} /></Typography>
+  <Typography level={'h1'}><PostRounded /></Typography>
   <Typography level={'title-lg'}>No more posts</Typography>
   <Typography level={'body-sm'}>
     Looks like you&apos;ve seen all the posts there are. Congratulations!

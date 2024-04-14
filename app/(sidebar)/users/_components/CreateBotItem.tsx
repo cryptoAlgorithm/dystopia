@@ -12,7 +12,7 @@ import {
   Typography
 } from '@mui/joy'
 import {useState} from 'react'
-import {MaterialSymbol} from 'react-material-symbols'
+import AddRounded from '@mui-symbols-material/w400/AddRounded'
 
 export const CreateBotItem = ({ onCreate }: { onCreate: (token: string) => Promise<string> }) => {
   const [modalPresented, setModalPresented] = useState(false)
@@ -21,7 +21,7 @@ export const CreateBotItem = ({ onCreate }: { onCreate: (token: string) => Promi
   return <>
     <ListItem>
       <ListItemButton variant={'soft'} onClick={() => setModalPresented(true)}>
-        <ListItemDecorator><MaterialSymbol icon={'add'} /></ListItemDecorator>
+        <ListItemDecorator><AddRounded /></ListItemDecorator>
         Create Bot User
       </ListItemButton>
     </ListItem>

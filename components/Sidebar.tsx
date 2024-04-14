@@ -3,15 +3,18 @@
 import {Box, List, ListItem, ListItemButton, ListItemDecorator, ListSubheader} from '@mui/joy'
 import {usePathname} from 'next/navigation'
 import NextLink from 'next/link'
-import {MaterialSymbol, SymbolCodepoints} from 'react-material-symbols'
-import {ReactNode} from 'react'
+import {ReactElement, ReactNode} from 'react'
+import AddRounded from '@mui-symbols-material/w400/AddRounded'
+import HomeRounded from '@mui-symbols-material/w400/HomeRounded'
+import PersonRounded from '@mui-symbols-material/w400/PersonRounded'
+import SettingsRounded from '@mui-symbols-material/w400/SettingsRounded'
 
-const SelectableLinkButton = ({ icon, path, children }: { icon: SymbolCodepoints, path: string, children: ReactNode }) => {
+const SelectableLinkButton = ({ icon, path, children }: { icon: ReactElement, path: string, children: ReactNode }) => {
   const pathname = usePathname()
 
   return <ListItem>
     <ListItemButton selected={pathname == path} href={path} component={NextLink}>
-      <ListItemDecorator><MaterialSymbol icon={icon} /></ListItemDecorator>
+      <ListItemDecorator>{ icon }</ListItemDecorator>
       { children }
     </ListItemButton>
   </ListItem>
@@ -32,14 +35,14 @@ export const Sidebar = () => {
     '--List-radius': '8px',
     border: '1px solid var(--joy-palette-divider)', borderWidth: '0 1px 0 0'
   }}>
-    <SelectableLinkButton icon={'home'} path={'/'}>Home</SelectableLinkButton>
-    <SelectableLinkButton icon={'add'} path={'/post'}>Create Post</SelectableLinkButton>
+    <SelectableLinkButton icon={<HomeRounded />} path={'/'}>Home</SelectableLinkButton>
+    <SelectableLinkButton icon={<AddRounded />} path={'/post'}>Create Post</SelectableLinkButton>
     <Box flex={1}/>
     <ListItem nested>
       <ListSubheader>You</ListSubheader>
       <List>
-        <SelectableLinkButton icon={'people'} path={'/users'}>Users</SelectableLinkButton>
-        <SelectableLinkButton icon={'settings'} path={'/users/me/settings'}>Settings</SelectableLinkButton>
+        <SelectableLinkButton icon={<PersonRounded />} path={'/users'}>Users</SelectableLinkButton>
+        <SelectableLinkButton icon={<SettingsRounded />} path={'/users/me/settings'}>Settings</SelectableLinkButton>
       </List>
     </ListItem>
   </List>

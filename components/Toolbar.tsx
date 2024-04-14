@@ -7,7 +7,7 @@ import {
 import {getCookieSession} from '@/util/session/sessionManager'
 import NextLink from 'next/link'
 import {UserButton} from '@/components/user/UserButton'
-import {MaterialSymbol} from 'react-material-symbols'
+import AddRounded from '@mui-symbols-material/w400/AddRounded'
 
 export default function Toolbar() {
   const user = getCookieSession()
@@ -25,7 +25,7 @@ export default function Toolbar() {
     <Box flex={1} />
     { !!user
       ? <>
-        <Button component={NextLink} href={'/post'} variant={'soft'} startDecorator={<MaterialSymbol icon={'add'} />}>Post</Button>
+        <Button component={NextLink} href={'/post'} variant={'soft'} startDecorator={<AddRounded />}>Post</Button>
         <UserButton user={user} />
       </>
       : <Button component={NextLink} href={'/login'}>Login</Button>
