@@ -28,7 +28,7 @@ export const getComments = cache(async (postId: string): Promise<ClientComment[]
     .toArray()
 })
 
-export const addComment = async (content: string, parent: ObjectId, user: ObjectId): Promise<{ id: ObjectId | null }> => {
+export const createComment = async (content: string, parent: ObjectId, user: ObjectId): Promise<{ id: ObjectId | null }> => {
   const col = (await mongodb).db().collection<IComment>('comments')
   const res = await col.insertOne({
     content,

@@ -6,7 +6,8 @@ import {getCookieSession} from '@/util/session/sessionManager'
 import {createPost} from '@/data/postActions'
 
 export const createPostAction = async (formData: FormData) => {
-  if (!getCookieSession()) throw new Error('Missing session')
+  const session = getCookieSession()
+  if (!session) throw new Error('Missing session')
 
   const
     title = formData.get('title'),
@@ -14,6 +15,6 @@ export const createPostAction = async (formData: FormData) => {
   if (!title || typeof title != 'string'
     || !body || typeof body != 'string') throw new Error('Invalid payload')
 
-  const newPostID = await createPost(title, body)
+  const newPostID = await createPost(title, body, session.id)
   redirect(`/posts/${newPostID}`)
 }

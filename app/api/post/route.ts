@@ -7,6 +7,6 @@ const postSchema = z.object({
   body: z.string()
 })
 
-export const POST = catchAs400(postSchema, 'bot', async ({ title, body }): Promise<Response> =>
-  Response.json({ id: await createPost(title, body) })
+export const POST = catchAs400(postSchema, 'bot', async ({ title, body, session }): Promise<Response> =>
+  Response.json({ id: await createPost(title, body, session!.id) })
 )

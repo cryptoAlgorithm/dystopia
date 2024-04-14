@@ -10,10 +10,7 @@ import {VoteDelta} from '@/data/IVote'
 
 export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta, username: string }
 
-export const createPost = async (title: string, body: string): Promise<string> => {
-  const session = getCookieSession()
-  if (!session) throw new Error('No session')
-
+export const createPost = async (title: string, body: string, userID: string): Promise<string> => {
   title = title.trim()
   body = body.trim()
   if (title.length == 0 || body.length == 0) throw new Error('Missing content')
@@ -32,7 +29,7 @@ export const createPost = async (title: string, body: string): Promise<string> =
     .insertOne({
       title,
       content: body,
-      user: new ObjectId(session.id),
+      user: new ObjectId(userID),
       at: new Date(),
       embedding,
       voteCount: 0

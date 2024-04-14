@@ -1,15 +1,16 @@
 import {z, ZodError, ZodType} from 'zod'
-import {getCookieSession} from '@/util/session/sessionManager'
+import {CookieSession, getCookieSession} from '@/util/session/sessionManager'
 import {noAuthResponse} from '@/app/api/errorReponses'
 
-export const catchAs400 = <T extends ZodType<any, any, any>>(
-  schema: T, auth: 'user' | 'bot' | null, handler: (body: z.infer<T>) => Promise<Response>
-): ((req: Request) => Promise<Response>) => (async (req: Request) => {
-  if (auth && !getCookieSession(auth == 'bot')) return noAuthResponse
+export const catchAs400 = <T extends ZodType<any, any, any>, P>(
+  schema: T, auth: 'user' | 'bot' | null, handler: (body: z.infer<T> & { session: CookieSession | null }, params: P) => Promise<Response>
+): ((req: Request, params: P) => Promise<Response>) => (async (req, params) => {
+  const session = getCookieSession(auth == 'bot')
+  if (auth && !session) return noAuthResponse
   const json = await req.json()
   try {
     const body = await schema.parseAsync(json)
-    return handler(body)
+    return handler({ body, session }, params)
   } catch (e) {
     if (e instanceof ZodError) {
       console.warn('Zod validation error', e.errors)
