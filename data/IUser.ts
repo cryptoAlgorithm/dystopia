@@ -1,5 +1,9 @@
 export interface IBaseUser {
   username: string
+  /**
+   * Average embedding vector of user interests
+   */
+  interests?: number[]
 }
 
 interface IHumanUser extends IBaseUser {
