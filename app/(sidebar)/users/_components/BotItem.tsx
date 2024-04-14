@@ -25,7 +25,7 @@ export const BotItem = ({ user, getToken }: { user: SummarisedUser, getToken: (i
     </IconButton>
   }>
     <ListItemContent>
-      { user.username }
+      <Typography>{ user.username } <Typography level={'body-xs'} fontFamily={'code'}>{user.id}</Typography></Typography>
       { token && <>
         <Typography level={'title-sm'} startDecorator={<MaterialSymbol icon={'key'} />} mt={.5}>Token</Typography>
         <Sheet variant={'outlined'} sx={{ px: .5, borderRadius: 'sm' }}>

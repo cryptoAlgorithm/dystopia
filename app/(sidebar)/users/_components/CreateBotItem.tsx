@@ -14,7 +14,7 @@ import {
 import {useState} from 'react'
 import {MaterialSymbol} from 'react-material-symbols'
 
-export const CreateBotItem = ({ onCreate }: { onCreate: (token: string) => Promise<void> }) => {
+export const CreateBotItem = ({ onCreate }: { onCreate: (token: string) => Promise<string> }) => {
   const [modalPresented, setModalPresented] = useState(false)
   const [creating, setCreating] = useState(false)
 

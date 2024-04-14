@@ -7,13 +7,17 @@ import {IUser} from '@/data/IUser'
 import {revalidatePath} from 'next/cache'
 import {ObjectId} from 'bson'
 
-export const addBotUser = async (username: string) => {
-  if (!getCookieSession()) return
+export const addBotUser = async (username: string, persona?: string): Promise<string> => {
+  if (!getCookieSession()) throw new Error('Missing session')
 
   const res = await (await mongodb).db()
     .collection<IUser>('users')
-    .insertOne({ type: 'bot', username: username })
-  if (res.acknowledged) revalidatePath('/users')
+    .insertOne({ type: 'bot', username: username, persona })
+  if (!res.acknowledged) throw new Error('Failed to create bot user')
+
+  revalidatePath('/users')
+
+  return res.insertedId.toHexString()
 }
 
 const removeBotUser = async (id: string) => {

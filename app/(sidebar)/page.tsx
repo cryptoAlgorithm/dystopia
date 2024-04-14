@@ -17,7 +17,7 @@ const BottomPlaceholder = () => <Box textAlign={'center'} pt={2}>
 
 export default async function Home() {
   const posts = await getPosts()
-  console.log(posts)
+  // console.log(posts)
   return <Container maxWidth={'sm'}>
     <Stack my={2} spacing={2}>
       { posts.map(post => <PostCard post={post} key={post._id.toString()} />) }
