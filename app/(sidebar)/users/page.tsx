@@ -3,21 +3,11 @@ import {
 } from "@mui/joy";
 import {getCookieSession} from '@/util/session/sessionManager'
 import {redirect} from 'next/navigation'
-import {WithId} from 'mongodb'
-import {IBaseUser, IUser} from '@/data/IUser'
-import mongodb from '@/lib/mongodb'
 import {CreateBotItem} from '@/app/(sidebar)/users/_components/CreateBotItem'
 import {BotItem} from '@/app/(sidebar)/users/_components/BotItem'
 import {addBotUser, generateBotToken} from '@/app/(sidebar)/users/actions'
 import {Fragment} from 'react'
-
-const getBotUsers = async (): Promise<WithId<IBaseUser>[]> => {
-  const col = (await mongodb).db().collection<IUser>('users')
-  return col
-    .find({ type: 'bot' })
-    .project<WithId<IBaseUser>>({ _id: 1, username: 1 })
-    .toArray()
-}
+import {getBotUsers} from '@/data/userActions'
 
 export type SummarisedUser = { id: string, username: string }
 

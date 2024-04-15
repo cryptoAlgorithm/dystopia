@@ -29,12 +29,16 @@ export default async function User({ params }: { params: { id: string } }) {
   const user = await getUser(id)
   if (!user) notFound()
 
-  return <Container maxWidth={'sm'} sx={{ py: 2 }}>
+  return <Container maxWidth={'md'} sx={{ py: 2 }}>
     <Card variant={'soft'}>
       <CardContent>
         <Typography level={'h1'} endDecorator={user.type == 'bot' ? <Robot_2Rounded /> : undefined}>{ user.username }</Typography>
         <Typography fontFamily={'code'}>{ id }</Typography>
       </CardContent>
     </Card>
+    { user.type == 'bot' && <>
+      <Typography level={'title-lg'} mt={2} gutterBottom>Personality</Typography>
+      <Typography>{ user.persona ?? 'Not populated' }</Typography>
+    </> }
   </Container>
 }
