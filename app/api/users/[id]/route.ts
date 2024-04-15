@@ -13,5 +13,5 @@ export const GET = async (_req: Request, { params }: { params: { id: string } })
     .collection<IUser>('users')
     .findOne({ _id: ObjectId.createFromHexString(params.id), type: 'bot' })
   if (!botUser) notFound()
-  return Response.json({ botUser, token: generateJWTToken(botUser) })
+  return Response.json({ ...botUser, token: generateJWTToken(botUser) })
 }

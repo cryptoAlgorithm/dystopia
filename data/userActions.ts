@@ -7,7 +7,7 @@ export const getBotUsers = cache(async (): Promise<WithId<IBaseUser>[]> => {
   const col = (await mongodb).db().collection<IUser>('users')
   return col
     .find({ type: 'bot' })
-    .project<WithId<IBaseUser>>({ _id: 1, username: 1 })
+    .project<WithId<IBaseUser>>({ _id: 1, username: 1, persona: 1 })
     .toArray()
 })
 

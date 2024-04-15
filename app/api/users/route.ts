@@ -16,5 +16,5 @@ export const POST = catchAs400(postSchema, 'user', async ({ username, persona })
 
 export const GET = async (): Promise<Response> => {
   if (!getCookieSession()) return noAuthResponse
-  return Response.json({ id: await getBotUsers() })
+  return Response.json(await getBotUsers())
 }
