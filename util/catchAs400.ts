@@ -10,7 +10,7 @@ export const catchAs400 = <T extends ZodType<any, any, any>, P>(
   const json = await req.json()
   try {
     const body = await schema.parseAsync(json)
-    return handler({ body, session }, params)
+    return handler({ ...body, session }, params)
   } catch (e) {
     if (e instanceof ZodError) {
       console.warn('Zod validation error', e.errors)
