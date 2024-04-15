@@ -8,6 +8,7 @@ import {ObjectId} from 'bson'
 import {Filter} from 'mongodb'
 import {revalidatePath} from 'next/cache'
 import {IPost} from '@/data/IPost'
+import {IUser} from '@/data/IUser'
 
 export const updateVote = async (target: string, delta: VoteDelta) => {
   const userSession = getCookieSession()
@@ -47,8 +48,7 @@ export const updateVote = async (target: string, delta: VoteDelta) => {
       }
 
       // Update vote count
-      const updatedPost = await db
-        .collection<IPost>('posts')
+      const updatedPost = await postCol
         .aggregate<{ voteCount: number }>([{
           $match: { _id: tgt }
         }, {
@@ -81,6 +81,68 @@ export const updateVote = async (target: string, delta: VoteDelta) => {
         .collection<IPost>('posts')
         .updateOne({ _id: tgt }, { $set: { voteCount: newVoteCount } }, { session })
       if (!updateRes.acknowledged) throw new Error('Post update failed')
+
+      // Update user interests vector
+      // Probably not the most performant solution, but should be fine at this scale
+      const avgEmbedding = await col
+        .aggregate<{ embedding: number[] }>([{
+          $match: { user: new ObjectId(userSession.id), delta: 1 }
+        }, {
+          $lookup: {
+            from: 'posts',
+            localField: 'for',
+            foreignField: '_id',
+            as: 'postData',
+          }
+        }, {
+          $unwind: '$postData'
+        }, {
+          $group: {
+            _id: null,
+            embedding: { $push: '$postData.embedding' },
+            count: { $sum: 1 }
+          }
+        }, {
+          $project: {
+            _id: 0,
+            embedding: {
+              $map: {
+                input: {
+                  $reduce: {
+                    input: {$slice: ["$embedding", 1, {$size: "$embedding"}]},
+                    initialValue: {$arrayElemAt: ["$embedding", 0]},
+                    in: {
+                      $map: {
+                        input: {$range: [0, {$size: "$$this"}]},
+                        as: "index",
+                        in: {
+                          $add: [
+                            {$arrayElemAt: ["$$this", "$$index"]},
+                            {$arrayElemAt: ["$$value", "$$index"]}
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                as: 'elem',
+                in: { $divide: ['$$elem', '$count'] }
+              }
+            }
+          }
+        }], {
+          session
+        })
+        .toArray()
+      const updateUserRes = await db
+        .collection<IUser>('users')
+        .updateOne(
+          { _id: new ObjectId(userSession.id) },
+          { $set: { interests: avgEmbedding[0]?.embedding } },
+          { session }
+        )
+      if (!updateUserRes.acknowledged) throw new Error('User update failed')
+      console.log('Updated user interests embedding:', avgEmbedding[0]?.embedding)
     })
   } finally {
     await session.endSession()
