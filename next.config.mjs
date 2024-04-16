@@ -9,7 +9,16 @@ const nextConfig = {
     webpack: (config) => {
         config.resolve.alias['@mui/material'] = '@mui/joy'
         return config
-    }
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'static.dystopia.vkwok.dev',
+                port: ''
+            },
+        ],
+    },
 };
 
 export default withBundleAnalyzer(nextConfig);
