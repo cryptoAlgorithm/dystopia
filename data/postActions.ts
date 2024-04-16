@@ -33,7 +33,8 @@ export const createPost = async (title: string, body: string, userID: string, im
       user: new ObjectId(userID),
       at: new Date(),
       embedding,
-      voteCount: 0
+      voteCount: 0,
+      imageURL: imageURL
     })
   if (!res.acknowledged) throw new Error('Failed to create post doc')
 

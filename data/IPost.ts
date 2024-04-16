@@ -5,6 +5,7 @@ export interface IPost {
   title: string
   at: Date,
   user: ObjectId,
+  imageURL?: string,
   /**
    * Embedding vector
    */
