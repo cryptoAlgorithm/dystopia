@@ -1,16 +1,17 @@
 import 'server-only'
 import {cache} from "react";
-import {WithId} from "mongodb";
+import {WithId, Document} from "mongodb";
 import {IPost} from "@/data/IPost";
 import mongodb from "@/lib/mongodb";
 import {ObjectId} from "bson";
 import {getCookieSession} from '@/util/session/sessionManager'
 import {openai} from '@/lib/openai'
 import {VoteDelta} from '@/data/IVote'
+import {IUser} from '@/data/IUser'
 
 export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta, username: string }
 
-export const createPost = async (title: string, body: string, userID: string): Promise<string> => {
+export const createPost = async (title: string, body: string, userID: string, imageURL?: string): Promise<string> => {
   title = title.trim()
   body = body.trim()
   if (title.length == 0 || body.length == 0) throw new Error('Missing content')
@@ -39,14 +40,41 @@ export const createPost = async (title: string, body: string, userID: string): P
   return res.insertedId.toHexString()
 }
 
-export const getPosts = cache(async (id?: string): Promise<QueryPost[]> => {
+export const getPosts = cache(async (max?: number, id?: string): Promise<QueryPost[]> => {
   const session = getCookieSession()
   const db = (await mongodb).db()
-  return db
-    .collection<IPost>('posts')
-    .aggregate<QueryPost>([...(id ? [{
-      $match: { _id: new ObjectId(id) }
-    }] : []), ...(session ? [{
+
+  let pipeline: Document[] = id ? [{ $match: { _id: new ObjectId(id) } }] : []
+  let interests: number[] | undefined
+  if (session) {
+    // Retrieve user interests embedding
+    const user = await db
+      .collection<IUser>('users')
+      .findOne({_id: new ObjectId(session.id)})
+    if (!user) throw new Error('Invalid session user ID')
+    interests = user.interests
+  }
+  if (interests) {
+    pipeline.push({
+      $vectorSearch: {
+        index: 'embedding',
+        path: 'embedding',
+        queryVector: interests,
+        numCandidates: 1000,
+        limit: max ?? 50
+      }
+    }, {
+      $sort: { vectorSearchScore: -1 }
+    })
+  } else {
+    pipeline.push({
+      $sort: { at: -1 }
+    }, {
+      $limit: max ?? 50
+    })
+  }
+  if (session) {
+    pipeline.push({
       $lookup: {
         from: 'votes',
         let: {
@@ -65,24 +93,28 @@ export const getPosts = cache(async (id?: string): Promise<QueryPost[]> => {
         }],
         as: 'userVote'
       }
-    }] : []), {
-      $lookup: {
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'fullUser'
-      }
-    }, {
-      $set: {
-        username: { $first: '$fullUser.username' },
-        userVote: { $first: '$userVote.delta' }
-      }
-    }, {
-      $project: { embedding: 0, fullUser: 0 }
-    }, {
-      $sort: { at: -1 }
-    }])
+    })
+  }
+  pipeline.push({
+    $lookup: {
+      from: 'users',
+      localField: 'user',
+      foreignField: '_id',
+      as: 'fullUser'
+    }
+  }, {
+    $set: {
+      username: { $first: '$fullUser.username' },
+      userVote: { $first: '$userVote.delta' }
+    }
+  }, {
+    $project: { embedding: 0, fullUser: 0 }
+  })
+
+  return db
+    .collection<IPost>('posts')
+    .aggregate<QueryPost>(pipeline)
     .toArray()
 })
 
-export const getPost = cache(async (id: string): Promise<QueryPost | null> => (await getPosts(id))[0])
+export const getPost = cache(async (id: string): Promise<QueryPost | null> => (await getPosts(1, id))[0])
