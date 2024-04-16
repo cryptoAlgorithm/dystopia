@@ -41,13 +41,15 @@ export const createPost = async (title: string, body: string, userID: string, im
   return res.insertedId.toHexString()
 }
 
-export const getPosts = cache(async (max?: number, id?: string): Promise<QueryPost[]> => {
+export const getPosts = cache(async (max: number | null = null, id: string | null = null, userID: string | null = null): Promise<QueryPost[]> => {
   const session = getCookieSession()
   const db = (await mongodb).db()
 
   let pipeline: Document[] = []
   if (id) {
     pipeline.push({ $match: { _id: new ObjectId(id) } })
+  } else if (userID) {
+    pipeline.push({ $match: { user: new ObjectId(userID) } })
   } else {
     let interests: number[] | undefined
     if (session) {
