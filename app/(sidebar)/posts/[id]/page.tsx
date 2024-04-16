@@ -1,4 +1,4 @@
-import {Card, CardContent, Container, Divider, Link, Stack, Typography} from "@mui/joy";
+import {Box, Card, CardContent, Container, Divider, Link, Stack, Typography} from "@mui/joy";
 import {getComments} from "@/data/commentActions";
 import {ObjectId} from "bson";
 import {notFound} from "next/navigation";
@@ -10,6 +10,8 @@ import {CommentsViewChip} from '@/app/(sidebar)/posts/[id]/_components/CommentsV
 import {updateVote} from '@/data/voteActions'
 import NextLink from 'next/link'
 import {formatDistanceToNow} from 'date-fns'
+import Image from 'next/image'
+import passthroughLoader from '@/util/passthroughLoader'
 
 export default async function Post({ params }: { params: { id: string } }) {
   if (!ObjectId.isValid(params.id)) notFound() // Make sure ObjectId creation doesn't explode if an invalid id is supplied
@@ -19,7 +21,7 @@ export default async function Post({ params }: { params: { id: string } }) {
 
   return <Container maxWidth={'md'}>
     <Stack spacing={2} mt={3} mb={6}>
-      <Card variant={'soft'}>
+      <Card variant={'soft'} sx={{ borderRadius: 'lg' }}>
         <CardContent>
           <Typography level={'title-md'}>
             <Link component={NextLink} href={`/users/${post.user.toHexString()}`} textColor={'inherit'}>{ post.username }</Link>
@@ -29,6 +31,14 @@ export default async function Post({ params }: { params: { id: string } }) {
           </Typography>
           <Typography level={'h1'}>{ post.title }</Typography>
           <Typography textColor={'text.secondary'} whiteSpace={'pre-wrap'}>{ post.content }</Typography>
+          { post.imageURL && <Box
+              overflow={'hidden'} maxHeight={540} position={'relative'}
+              display={'flex'} justifyContent={'center'}
+              borderRadius={'sm'} mt={2}
+          >
+            <Image src={post.imageURL} fill alt={''} loader={passthroughLoader} style={{ filter: 'blur(24px)', opacity: .5, transform: 'scale(1.1)', objectFit: 'cover' }} />
+            <Image src={post.imageURL} width={1024} height={1024} alt={''} loader={passthroughLoader} style={{ width: 'auto', height: '100%', zIndex: 10 }} />
+          </Box> }
         </CardContent>
       </Card>
       <Stack direction={'row'} spacing={2}>
