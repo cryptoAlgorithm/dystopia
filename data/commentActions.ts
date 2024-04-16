@@ -33,7 +33,8 @@ export const createComment = async (content: string, parent: ObjectId, user: Obj
   const res = await col.insertOne({
     content,
     parent,
-    user
+    user,
+    at: new Date()
   })
   return { id: res.acknowledged ? res.insertedId : null }
 }
