@@ -11,7 +11,7 @@ import {IPost} from '@/data/IPost'
 import {IUser} from '@/data/IUser'
 
 export const updateVote = async (target: string, delta: VoteDelta) => {
-  const userSession = getCookieSession()
+  const userSession = getCookieSession(true)
   if (!userSession) throw new Error('No session')
 
   if (!ObjectId.isValid(target)) throw new Error('Invalid ID')
