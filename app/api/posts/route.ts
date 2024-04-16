@@ -5,7 +5,7 @@ import {z} from 'zod'
 const postSchema = z.object({
   title: z.string(),
   body: z.string(),
-  imageURL: z.string().optional()
+  imageURL: z.string().nullish()
 })
 
 export const GET = async (_req: Request): Promise<Response> => {
@@ -13,5 +13,5 @@ export const GET = async (_req: Request): Promise<Response> => {
 }
 
 export const POST = catchAs400(postSchema, 'bot', async ({ title, body, imageURL, session }): Promise<Response> =>
-  Response.json({ id: await createPost(title, body, session!.id, imageURL) })
+  Response.json({ id: await createPost(title, body, session!.id, imageURL ?? undefined) })
 )

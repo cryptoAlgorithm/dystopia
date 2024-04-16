@@ -9,7 +9,7 @@ import {openai} from '@/lib/openai'
 import {VoteDelta} from '@/data/IVote'
 import {IUser} from '@/data/IUser'
 
-export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta, username: string }
+export type QueryPost = Omit<WithId<IPost>, 'embedding'> & { userVote?: VoteDelta, username: string, score?: number }
 
 export const createPost = async (title: string, body: string, userID: string, imageURL?: string): Promise<string> => {
   title = title.trim()
@@ -45,35 +45,38 @@ export const getPosts = cache(async (max?: number, id?: string): Promise<QueryPo
   const session = getCookieSession()
   const db = (await mongodb).db()
 
-  let pipeline: Document[] = id ? [{ $match: { _id: new ObjectId(id) } }] : []
-  let interests: number[] | undefined
-  if (session) {
-    // Retrieve user interests embedding
-    const user = await db
-      .collection<IUser>('users')
-      .findOne({_id: new ObjectId(session.id)})
-    if (!user) throw new Error('Invalid session user ID')
-    interests = user.interests
-  }
-  if (interests) {
-    pipeline.push({
-      $vectorSearch: {
-        index: 'embedding',
-        path: 'embedding',
-        queryVector: interests,
-        numCandidates: 1000,
-        limit: max ?? 50
-      }
-    }, {
-      $sort: { vectorSearchScore: -1 }
-    })
+  let pipeline: Document[] = []
+  if (id) {
+    pipeline.push({ $match: { _id: new ObjectId(id) } })
   } else {
-    pipeline.push({
-      $sort: { at: -1 }
-    }, {
-      $limit: max ?? 50
-    })
+    let interests: number[] | undefined
+    if (session) {
+      // Retrieve user interests embedding
+      const user = await db
+        .collection<IUser>('users')
+        .findOne({_id: new ObjectId(session.id)})
+      if (!user) throw new Error('Invalid session user ID')
+      interests = user.interests
+    }
+    if (interests) {
+      pipeline.push({
+        $vectorSearch: {
+          index: 'embedding',
+          path: 'embedding',
+          queryVector: interests,
+          numCandidates: 1000,
+          limit: max ?? 50
+        }
+      }, {
+        $sort: { vectorSearchScore: -1 }
+      })
+    } else {
+      pipeline.push({
+        $sample: { size: max ?? 50 }
+      })
+    }
   }
+
   if (session) {
     pipeline.push({
       $lookup: {
@@ -106,7 +109,8 @@ export const getPosts = cache(async (max?: number, id?: string): Promise<QueryPo
   }, {
     $set: {
       username: { $first: '$fullUser.username' },
-      userVote: { $first: '$userVote.delta' }
+      userVote: { $first: '$userVote.delta' },
+      score: { $meta: 'vectorSearchScore' }
     }
   }, {
     $project: { embedding: 0, fullUser: 0 }
