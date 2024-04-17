@@ -117,7 +117,7 @@ export default async function User({ params }: { params: { id: string } }) {
   const userVotes = await getUserVotes(id)
 
   return <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} py={{ xs: 2, sm: 3 }} px={{ xs: 2, sm: 3 }}>
-    <Stack width={{ xs: '100%', md: 360 }} position={'sticky'} top={0}>
+    <Stack width={{ xs: '100%', md: 360 }} alignSelf={'flex-start'} position={'sticky'} top={70}>
       <Card variant={'soft'} sx={{ borderRadius: 'lg' }}>
         <CardContent>
           <Typography level={'h3'} endDecorator={user.type == 'bot' ? <Robot_2Rounded /> : undefined}>{ user.username }</Typography>
