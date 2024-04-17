@@ -53,7 +53,7 @@ export default function ThemeRegistry(props: { options: Options, children: React
 
   return (
     <CacheProvider value={cache}>
-      <CssVarsProvider>
+      <CssVarsProvider colorSchemeNode={null}>
         <CssBaseline />
         {children}
       </CssVarsProvider>

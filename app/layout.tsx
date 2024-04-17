@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
-import {CssBaseline, GlobalStyles} from '@mui/joy';
+import {GlobalStyles} from '@mui/joy';
 import ThemeRegistry from '@/components/ThemeRegistry'
+import {getCookieTheme} from '@/util/colorScheme'
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,11 +16,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const colorScheme = getCookieTheme()
   return (
-    <html lang='en'>
+    <html lang='en' data-joy-color-scheme={colorScheme}>
       <body className={inter.className}>
       <ThemeRegistry options={{ key: 'joy' }}>
-        <CssBaseline />
         <GlobalStyles styles={{
           html: {
             scrollBehavior: 'smooth'
