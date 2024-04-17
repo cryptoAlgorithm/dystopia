@@ -4,12 +4,12 @@ import {ClientComment, IComment} from "@/data/IComment";
 import mongodb from "@/lib/mongodb";
 import {ObjectId} from "bson";
 
-export const getComments = cache(async (postId: string): Promise<ClientComment[]> => {
+export const getComments = cache(async (postID: string): Promise<ClientComment[]> => {
   const col = (await mongodb).db().collection<IComment>('comments')
   return col
     .aggregate<ClientComment>([{
       $match: {
-        parent: ObjectId.createFromHexString(postId)
+        parent: ObjectId.createFromHexString(postID)
       }
     }, {
       $lookup: {
