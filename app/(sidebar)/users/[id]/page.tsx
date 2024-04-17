@@ -157,7 +157,7 @@ export default async function User({ params }: { params: { id: string } }) {
         <TabPanel value={2}>
           <Stack spacing={2}>
             { userVotes.map(vote => <VoteInfo key={vote._id.toHexString()} vote={vote} />) }
-            { userComments.length == 0 && <Stack alignItems={'center'}>
+            { userVotes.length == 0 && <Stack alignItems={'center'}>
                 <Typography level={'h1'}><ThumbsUpDownRounded /></Typography>
                 <Typography level={'title-lg'}>No votes</Typography>
             </Stack> }

@@ -17,9 +17,15 @@ export default function Toolbar() {
     position: 'fixed',
     left: 0, right: 0,
     zIndex: 100,
-    backdropFilter: 'blur(12px) saturate(1.2)',
+    backdropFilter: 'saturate(1.8) blur(20px)',
     height: 54,
-    borderBottom: '1px solid var(--joy-palette-divider)'
+    borderBottom: '1px solid var(--joy-palette-divider)',
+    ':root [data-joy-color-scheme="light"] &': {
+      backgroundColor: 'rgba(250 250 250 / .6)'
+    },
+    ':root [data-joy-color-scheme="dark"] &': {
+      backgroundColor: 'rgba(22 22 22 / .6)'
+    }
   }}>
     <Typography level={'h4'} component={'h1'}>Dystopia</Typography>
     <Box flex={1} />

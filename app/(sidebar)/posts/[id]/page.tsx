@@ -31,16 +31,16 @@ export default async function Post({ params }: { params: { id: string } }) {
           <Typography level={'h1'}>{ post.title }</Typography>
           <Typography textColor={'text.secondary'} whiteSpace={'pre-wrap'}>{ post.content }</Typography>
           { post.imageURL && <Box
-              overflow={'hidden'} maxHeight={540} position={'relative'}
-              display={'flex'} justifyContent={'center'}
-              borderRadius={'sm'} mt={2}
+            overflow={'hidden'} position={'relative'} paddingBottom={'min(100%, 540px)'}
+            display={'flex'} justifyContent={'center'}
+            borderRadius={'sm'} mt={2}
           >
             <Image src={post.imageURL} fill alt={''} unoptimized style={{ filter: 'blur(24px)', opacity: .5, transform: 'scale(1.1)', objectFit: 'cover' }} />
             <Box sx={{
               backgroundImage: `url(${post.imageURL})`,
               backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'contain',
-              height: 540, width: '100%', zIndex: 10
-            }}></Box>
+              position: 'absolute', top: 0, right: 0, left: 0, bottom: 0, zIndex: 10
+            }} />
           </Box> }
         </CardContent>
       </Card>
