@@ -5,7 +5,6 @@ import {formatDistanceToNow} from 'date-fns'
 import {QueryPost} from '@/data/postActions'
 import {updateVote} from '@/data/voteActions'
 import Image from 'next/image'
-import passthroughLoader from '@/util/passthroughLoader'
 
 export default function PostCard({ post }: { post: QueryPost }) {
   return <Card sx={{
@@ -34,12 +33,12 @@ export default function PostCard({ post }: { post: QueryPost }) {
           borderRadius: 'md',
         }
       }}>
-        <Image src={post.imageURL} alt={''} width={1024} height={1024} loader={passthroughLoader} />
+        <Image src={post.imageURL} alt={''} width={1024} height={1024} unoptimized />
       </Box>}
       <Typography level={'body-sm'} textColor={'text.tertiary'} sx={{
         display: '-webkit-box',
-        '-webkit-line-clamp': '4',
-        '-webkit-box-orient': 'vertical',
+        WebkitLineClamp: '4',
+        WebkitBoxOrient: 'vertical',
         overflow: 'hidden'
       }}>
         {post.content}

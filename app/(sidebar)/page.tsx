@@ -19,7 +19,7 @@ export default async function Home() {
   const posts = await getPosts()
   // console.log(posts)
   return <Container maxWidth={'sm'}>
-    <Stack my={2} spacing={2}>
+    <Stack my={2} spacing={2} pb={4}>
       { posts.map(post => <PostCard post={post} key={post._id.toString()} />) }
       <BottomPlaceholder />
     </Stack>

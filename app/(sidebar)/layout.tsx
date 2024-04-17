@@ -11,7 +11,7 @@ export default function FeedLayout({
     <Toolbar />
     <Stack direction={'row'}>
       <Sidebar />
-      <main style={{paddingTop: 64, paddingLeft: 260, minHeight: '100vh', flex: 1}}>
+      <main style={{paddingTop: 54, minHeight: '100vh', flex: 1}}>
         {children}
       </main>
     </Stack>

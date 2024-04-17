@@ -13,7 +13,7 @@ export default function Toolbar() {
   const user = getCookieSession()
   return <Stack spacing={1} component={'header'} direction={'row'} sx={{
     alignItems: 'center',
-    py: 1, px: 2,
+    py: 1, px: 2, pl: { xs: '56px', sm: 2 },
     position: 'fixed',
     left: 0, right: 0,
     zIndex: 100,
