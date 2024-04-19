@@ -1,18 +1,21 @@
 'use client'
 
 import { useFormState } from 'react-dom'
-import {Box, Button, Card, FormControl, FormHelperText, Input, Sheet, Stack, useColorScheme, useTheme} from "@mui/joy";
+import {Box, Button, FormControl, FormHelperText, Input, Sheet, Stack} from "@mui/joy";
 import {loginAction} from "@/app/login/actions";
 import {LoginButton} from '@/app/login/_components/LoginButton'
-import Turnstile from 'react-turnstile'
-import {useState} from 'react'
+import Turnstile, {BoundTurnstileObject} from 'react-turnstile'
+import {useRef, useState} from 'react'
+import {DefaultColorScheme} from '@mui/joy/styles/types'
 
-export default function LoginForm() {
+export default function LoginForm({ theme }: { theme: DefaultColorScheme }) {
   const [state, formAction] = useFormState(loginAction, { success: null })
   const [hasToken, setHasToken] = useState(false)
-  const { mode } = useColorScheme()
+  const turnstileRef = useRef<BoundTurnstileObject | null>(null)
 
-  return <Stack component={'form'} action={formAction}>
+  return <Stack component={'form'} action={formAction} onSubmit={() => {
+    if (state) turnstileRef.current?.reset()
+  }}>
     <Input
       size={'lg'} name={'user'} placeholder={'Username'} autoComplete={'username'} required
       sx={{
@@ -39,7 +42,10 @@ export default function LoginForm() {
           sitekey={'0x4AAAAAAAWz4JsFLmr0aoeI'}
           fixedSize
           responseField responseFieldName={'turnstile'} action={'login'}
-          theme={mode == 'system' ? 'auto' : mode}
+          theme={theme}
+          onLoad={(_, turnstile) => {
+            turnstileRef.current = turnstile
+          }}
           onVerify={(token) => {
             console.log('bing bong Turnstile', token)
             setHasToken(true)
