@@ -24,6 +24,8 @@ export const getComments = cache(async (postID: string): Promise<ClientComment[]
       }
     }, {
       $project: { fullUser: 0 }
+    }, {
+      $sort: { at: -1 }
     }])
     .toArray()
 })
