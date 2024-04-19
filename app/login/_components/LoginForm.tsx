@@ -10,7 +10,7 @@ import {DefaultColorScheme} from '@mui/joy/styles/types'
 
 export default function LoginForm({ theme }: { theme: DefaultColorScheme }) {
   const [state, formAction] = useFormState(loginAction, { success: null })
-  const [hasToken, setHasToken] = useState(false)
+  const [hasToken, setHasToken] = useState<string | null>(null)
   const turnstileRef = useRef<BoundTurnstileObject | null>(null)
 
   return <Stack component={'form'} action={formAction} onSubmit={() => {
@@ -35,22 +35,23 @@ export default function LoginForm({ theme }: { theme: DefaultColorScheme }) {
       />
       { state.success == false && <FormHelperText>{state.reason}</FormHelperText> }
     </FormControl>
+    { hasToken && <input value={hasToken} name={'turnstile'} hidden /> }
     <Sheet sx={{ mt: 1, borderRadius: 'sm', overflow: 'hidden', display: 'flex', justifyContent: 'center' }}>
       <Box overflow={'hidden'}>
         <Turnstile
           style={{ margin: -2 }}
           sitekey={'0x4AAAAAAAWz4JsFLmr0aoeI'}
           fixedSize
-          responseField responseFieldName={'turnstile'} action={'login'}
+          action={'login'}
           theme={theme}
           onLoad={(_, turnstile) => {
             turnstileRef.current = turnstile
           }}
           onVerify={(token) => {
             console.log('bing bong Turnstile', token)
-            setHasToken(true)
+            setHasToken(token)
           }}
-          onExpire={() => setHasToken(false)}
+          onExpire={() => setHasToken(null)}
         />
       </Box>
     </Sheet>
