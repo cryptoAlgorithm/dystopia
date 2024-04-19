@@ -19,9 +19,7 @@ export default function PostCard({ post }: { post: QueryPost }) {
         &nbsp;&bull; {formatDistanceToNow(post.at, { addSuffix: true })}
       </Typography>
       <Typography level={'title-lg'}>
-        <Link component={NextLink} prefetch={false} overlay href={`/posts/${post._id.toString()}`}>
-          {post.title}
-        </Link>
+        <Link component={NextLink} overlay href={`/posts/${post._id.toString()}`}>{post.title}</Link>
       </Typography>
       { post.imageURL && <Box sx={{
         width: '100%', display: 'flex', my: 1,

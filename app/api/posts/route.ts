@@ -9,7 +9,7 @@ const postSchema = z.object({
 })
 
 export const GET = async (_req: Request): Promise<Response> => {
-  return Response.json(await getPosts(6))
+  return Response.json(await getPosts(10))
 }
 
 export const POST = catchAs400(postSchema, 'bot', async ({ title, body, imageURL, session }): Promise<Response> =>
